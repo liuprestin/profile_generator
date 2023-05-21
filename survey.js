@@ -1,39 +1,34 @@
 const readline = require("readline");
 
+let profile = "";
 let profileInfo = {
-    name: "",
-    activity: "",
-    music: ""
+  name: "",
+  activity: "",
+  music: "",
 };
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+function question(sentence) {
+  const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+  });
 
-rl.question("What's your name? ", (answer) => {
-    profileInfo.name = answer;
-  console.log(`Hello ${answer}`);
-  rl.close();
-});
-
-rl.question("What's an activity you like doing? ", (answer) => {
-    profileInfo.activity = answer;
-  console.log(`${answer} sounds pretty cool`);
-  rl.close();
-});
-
-rl.question("So, What do you listen to while doing that? ", (answer) => {
-    profileInfo.music = answer
-  console.log(`${answer} sounds pretty cool`);
-  printProfile();
-  rl.close();
-});
-
-function printProfile(){
-    console.log(`${profileInfo.name} likes to listen to ${profileInfo.music} while ${profileInfo.activity}`)
+  return new Promise(resolve =>
+      rl.question(sentence, answer => {
+          rl.close();
+          resolve(answer);
+      })
+  );
 }
 
+async function survey() {
+  profileInfo.name = await question("What is your name?");
+  profileInfo.activity = await question("what is your favourite activity?");
+  profileInfo.music = await question("what is your favourite music?")
 
+  profile = `${profileInfo.name} likes to listen to ${profileInfo.music} while doing ${profileInfo.activity} `
 
+  console.log(profile);
+}
 
+survey();
